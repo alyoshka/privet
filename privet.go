@@ -50,12 +50,13 @@ func process(update tgbotapi.Update) (answer tgbotapi.MessageConfig, err error) 
 		return tgbotapi.NewMessage(update.Message.Chat.ID, message), nil
 
 	// somebody is sad
-	case strings.Contains(update.Message.Text, sad):
+	case strings.HasPrefix(update.Message.Text, sad):
 		name := strings.TrimSpace(strings.TrimPrefix(strings.TrimPrefix(update.Message.Text, sad), "@"+myName))
 		if name == "" || name == "@"+myName {
 			name = getName(update.Message.From)
 		}
 		return tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf(dontBeSad, name)), nil
+
 	// father
 	case strings.Contains(strings.ToLower(strings.TrimSpace(update.Message.Text)), come) && update.Message.From.UserName == fatherName:
 		return tgbotapi.NewMessage(update.Message.Chat.ID, goodBoy), nil
