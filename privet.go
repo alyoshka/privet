@@ -51,7 +51,7 @@ func process(update tgbotapi.Update) (answer tgbotapi.MessageConfig, err error) 
 
 	// somebody is sad
 	case strings.Contains(update.Message.Text, sad):
-		name := strings.TrimSpace(strings.TrimPrefix(update.Message.Text, sad))
+		name := strings.TrimSpace(strings.TrimPrefix(strings.TrimPrefix(update.Message.Text, sad), "@"+myName))
 		if name == "" || name == "@"+myName {
 			name = getName(update.Message.From)
 		}
