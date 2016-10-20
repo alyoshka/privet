@@ -21,6 +21,8 @@ const (
 	dontBeSad  = "%s, главное - не расстраиваться!"
 )
 
+var myName string
+
 func getName(u *tgbotapi.User) string {
 	if u.FirstName != "" {
 		return u.FirstName
@@ -41,13 +43,16 @@ func process(update tgbotapi.Update) (answer tgbotapi.MessageConfig, err error) 
 
 	// newby
 	case update.Message.NewChatMember != nil:
+		if update.Message.NewChatMember.UserName == myName {
+			return tgbotapi.NewMessage(update.Message.Chat.ID, privet), nil
+		}
 		message := fmt.Sprintf(greet, getName(update.Message.NewChatMember))
 		return tgbotapi.NewMessage(update.Message.Chat.ID, message), nil
 
 	// somebody is sad
 	case strings.Contains(update.Message.Text, sad):
 		name := strings.TrimSpace(strings.TrimPrefix(update.Message.Text, sad))
-		if name == "" {
+		if name == "" || name == "@"+myName {
 			name = getName(update.Message.From)
 		}
 		return tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf(dontBeSad, name)), nil
@@ -81,7 +86,8 @@ func main() {
 		log.Panic(err)
 	}
 
-	log.Printf("Authorized on account %s", bot.Self.UserName)
+	myName = bot.Self.UserName
+	log.Printf("Authorized on account %s", myName)
 
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
