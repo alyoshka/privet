@@ -19,6 +19,8 @@ const (
 	leave      = "Ну ты чего? Нормально же общались"
 	greet      = "Привет, %s, расскажи пару слов о себе и о проекте, о котором нам почти не рассказывают!"
 	dontBeSad  = "%s, главное - не расстраиваться!"
+	lol        = "лол"
+	hail       = "卐卐卐卐卐卐"
 )
 
 var myName string
@@ -60,6 +62,10 @@ func process(update tgbotapi.Update) (answer tgbotapi.MessageConfig, err error) 
 	// father
 	case strings.Contains(strings.ToLower(strings.TrimSpace(update.Message.Text)), come) && update.Message.From.UserName == fatherName:
 		return tgbotapi.NewMessage(update.Message.Chat.ID, goodBoy), nil
+
+	// LOL
+	case strings.Contains(strings.ToLower(strings.TrimSpace(update.Message.Text)), lol):
+		return tgbotapi.NewMessage(update.Message.Chat.ID, hail), nil
 
 	// say hello
 	case strings.Contains(strings.ToLower(strings.TrimSpace(update.Message.Text)), privet):
